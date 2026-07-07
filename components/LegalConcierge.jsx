@@ -12,7 +12,8 @@ import {
   Send,
   Sparkles,
   UserRound,
-  X
+  X,
+  CornerDownLeft
 } from "lucide-react";
 import { matterTypes, partners } from "@/lib/firm-data";
 
@@ -236,12 +237,27 @@ export default function LegalConcierge({ embedded = false }) {
     });
   }
 
+  const showInputFooter = stage === "matter" || stage === "partner" || stage === "slot";
+  const inputPlaceholder =
+    stage === "matter"
+      ? "Select a matter type above..."
+      : stage === "partner"
+        ? "Select a partner above..."
+        : stage === "slot"
+          ? "Select an available slot above..."
+          : "Type your message...";
+
   const panel = (
     <section className={embedded ? "concierge concierge-embedded" : "concierge"} id="concierge">
       <div className="concierge-header">
-        <div>
-          <span className="eyebrow">Private Intake</span>
-          <h3>Legal Concierge</h3>
+        <div className="concierge-header-info">
+          <div className="concierge-avatar">
+            <span>SA</span>
+          </div>
+          <div>
+            <h3>Legal Concierge</h3>
+            <span className="concierge-status">Private intake</span>
+          </div>
         </div>
         {!embedded && (
           <button className="icon-button" type="button" onClick={() => setOpen(false)} aria-label="Close concierge">
@@ -253,109 +269,135 @@ export default function LegalConcierge({ embedded = false }) {
       <div className="conversation" ref={scroller}>
         {messages.map((message, index) => (
           <div className={`message ${message.role}`} key={`${message.role}-${index}`}>
-            <span>{message.content}</span>
+            {message.role === "assistant" && (
+              <div className="message-avatar" aria-hidden="true">
+                <span>SA</span>
+              </div>
+            )}
+            <div className="message-bubble">
+              <span>{message.content}</span>
+            </div>
           </div>
         ))}
         {loading && (
           <div className="message assistant loading-message">
-            <Loader2 size={16} />
-            <span>Preparing the next step</span>
+            <div className="message-avatar" aria-hidden="true">
+              <span>SA</span>
+            </div>
+            <div className="message-bubble typing-bubble">
+              <span className="typing-dots">
+                <span />
+                <span />
+                <span />
+              </span>
+            </div>
           </div>
         )}
       </div>
 
       {error && <div className="concierge-error">{error}</div>}
 
-      {stage === "matter" && (
-        <div className="choice-grid">
-          {matterTypes.map((matter) => (
-            <button type="button" className="choice-button" key={matter} onClick={() => chooseMatter(matter)}>
-              <Sparkles size={16} />
-              <span>{matter}</span>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {stage === "partner" && (
-        <div className="partner-choice-grid">
-          {partners.map((partner) => (
-            <button type="button" className="partner-choice" key={partner.id} onClick={() => choosePartner(partner.id)}>
-              <UserRound size={18} />
-              <strong>{partner.name}</strong>
-              <span>{partner.title}</span>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {stage === "slot" && (
-        <div className="slot-grid">
-          {slots.map((slot) => (
-            <button type="button" className="slot-button" key={slot.id} onClick={() => chooseSlot(slot)}>
-              <CalendarCheck size={16} />
-              <span>{slot.label}</span>
-            </button>
-          ))}
-          {!loading && slots.length === 0 && <p className="muted">No online slots are available for {selectedPartner.name}.</p>}
-        </div>
-      )}
-
-      {stage === "details" && (
-        <form className="details-form" onSubmit={submitDetails}>
-          <label>
-            Name
-            <input
-              required
-              value={details.clientName}
-              onChange={(event) => setDetails((current) => ({ ...current, clientName: event.target.value }))}
-              autoComplete="name"
-            />
-          </label>
-          <label>
-            Email
-            <input
-              required
-              type="email"
-              value={details.clientEmail}
-              onChange={(event) => setDetails((current) => ({ ...current, clientEmail: event.target.value }))}
-              autoComplete="email"
-            />
-          </label>
-          <label>
-            Phone
-            <input
-              value={details.clientPhone}
-              onChange={(event) => setDetails((current) => ({ ...current, clientPhone: event.target.value }))}
-              autoComplete="tel"
-            />
-          </label>
-          <label>
-            Brief notes
-            <textarea
-              rows="3"
-              value={details.notes}
-              onChange={(event) => setDetails((current) => ({ ...current, notes: event.target.value }))}
-            />
-          </label>
-          <button className="primary-button full-width" type="submit" disabled={loading}>
-            {loading ? <Loader2 size={18} /> : <Send size={18} />}
-            <span>Request Slot</span>
-          </button>
-        </form>
-      )}
-
-      {stage === "booked" && booking && (
-        <div className="booking-receipt">
-          <div className="receipt-mark">
-            <Check size={20} />
+      <div className="concierge-actions">
+        {stage === "matter" && (
+          <div className="choice-grid">
+            {matterTypes.map((matter) => (
+              <button type="button" className="choice-button" key={matter} onClick={() => chooseMatter(matter)}>
+                <Sparkles size={15} />
+                <span>{matter}</span>
+              </button>
+            ))}
           </div>
-          <strong>{booking.id}</strong>
-          <span>{booking.partnerName}</span>
-          <span>{booking.slotLabel}</span>
-          <button className="ghost-button" type="button" onClick={resetConversation}>
-            <Clock size={16} />
-            <span>New Request</span>
+        )}
+
+        {stage === "partner" && (
+          <div className="partner-choice-grid">
+            {partners.map((partner) => (
+              <button type="button" className="partner-choice" key={partner.id} onClick={() => choosePartner(partner.id)}>
+                <UserRound size={17} />
+                <strong>{partner.name}</strong>
+                <span>{partner.title}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {stage === "slot" && (
+          <div className="slot-grid">
+            {slots.map((slot) => (
+              <button type="button" className="slot-button" key={slot.id} onClick={() => chooseSlot(slot)}>
+                <CalendarCheck size={15} />
+                <span>{slot.label}</span>
+              </button>
+            ))}
+            {!loading && slots.length === 0 && <p className="muted">No online slots are available for {selectedPartner.name}.</p>}
+          </div>
+        )}
+
+        {stage === "details" && (
+          <form className="details-form" onSubmit={submitDetails}>
+            <label>
+              Name
+              <input
+                required
+                value={details.clientName}
+                onChange={(event) => setDetails((current) => ({ ...current, clientName: event.target.value }))}
+                autoComplete="name"
+              />
+            </label>
+            <label>
+              Email
+              <input
+                required
+                type="email"
+                value={details.clientEmail}
+                onChange={(event) => setDetails((current) => ({ ...current, clientEmail: event.target.value }))}
+                autoComplete="email"
+              />
+            </label>
+            <label>
+              Phone
+              <input
+                value={details.clientPhone}
+                onChange={(event) => setDetails((current) => ({ ...current, clientPhone: event.target.value }))}
+                autoComplete="tel"
+              />
+            </label>
+            <label>
+              Brief notes
+              <textarea
+                rows="2"
+                value={details.notes}
+                onChange={(event) => setDetails((current) => ({ ...current, notes: event.target.value }))}
+              />
+            </label>
+            <button className="primary-button full-width" type="submit" disabled={loading}>
+              {loading ? <Loader2 size={17} /> : <Send size={17} />}
+              <span>Request Slot</span>
+            </button>
+          </form>
+        )}
+
+        {stage === "booked" && booking && (
+          <div className="booking-receipt">
+            <div className="receipt-mark">
+              <Check size={18} />
+            </div>
+            <strong>{booking.id}</strong>
+            <span>{booking.partnerName}</span>
+            <span>{booking.slotLabel}</span>
+            <button className="ghost-button" type="button" onClick={resetConversation}>
+              <Clock size={15} />
+              <span>New Request</span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      {showInputFooter && (
+        <div className="concierge-input-bar">
+          <input type="text" placeholder={inputPlaceholder} disabled readOnly />
+          <button type="button" disabled aria-label="Send">
+            <CornerDownLeft size={18} />
           </button>
         </div>
       )}
