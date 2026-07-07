@@ -44,7 +44,7 @@ export default function PracticeAccordion() {
   const [openIndex, setOpenIndex] = useState(0);
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const rowsRef = useRef([]);
+  const cardsRef = useRef([]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -65,8 +65,8 @@ export default function PracticeAccordion() {
       );
 
       gsap.fromTo(
-        rowsRef.current,
-        { y: 40, opacity: 0 },
+        cardsRef.current,
+        { y: 48, opacity: 0 },
         {
           y: 0,
           opacity: 1,
@@ -107,17 +107,18 @@ export default function PracticeAccordion() {
             return (
               <div
                 key={group.title}
-                ref={(el) => (rowsRef.current[index] = el)}
-                className={`accordion-row ${isOpen ? "open" : ""}`}
+                ref={(el) => (cardsRef.current[index] = el)}
+                className={`accordion-card ${isOpen ? "open" : ""}`}
               >
+                <div className="accordion-card-border" aria-hidden="true" />
                 <button className="accordion-trigger" onClick={() => toggle(index)} aria-expanded={isOpen}>
                   <span className="accordion-number">{number}</span>
                   <span className="accordion-title">{group.title}</span>
                   <span className="accordion-icon">
-                    <ChevronDown size={22} />
+                    <ChevronDown size={20} />
                   </span>
                 </button>
-                <div className="accordion-panel" style={{ maxHeight: isOpen ? 400 : 0 }}>
+                <div className="accordion-panel" style={{ maxHeight: isOpen ? 420 : 0 }}>
                   <div className="accordion-panel-inner">
                     <BlurredStagger text={group.summary} isOpen={isOpen} />
                     <ul>

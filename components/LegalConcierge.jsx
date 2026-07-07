@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback } from "react";
 import {
   CalendarCheck,
   Check,
@@ -51,6 +52,7 @@ export default function LegalConcierge({ embedded = false }) {
     notes: ""
   });
   const scroller = useRef(null);
+  const panelRef = useRef(null);
 
   const selectedPartner = useMemo(
     () => partners.find((partner) => partner.id === context.partnerId) || partners[0],
@@ -63,6 +65,35 @@ export default function LegalConcierge({ embedded = false }) {
       behavior: "smooth"
     });
   }, [messages, stage, loading, slots]);
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (embedded || !open) return;
+
+    function handleKeyDown(event) {
+      if (event.key === "Escape") handleClose();
+    }
+
+    function handleClickOutside(event) {
+      if (panelRef.current && !panelRef.current.contains(event.target)) {
+        const launcher = document.querySelector(".concierge-launcher");
+        if (!launcher || !launcher.contains(event.target)) {
+          handleClose();
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open, embedded, handleClose]);
 
   async function conciergeReply(nextStage, nextContext, nextMessages) {
     setLoading(true);
@@ -335,10 +366,20 @@ export default function LegalConcierge({ embedded = false }) {
 
   return (
     <>
-      {open && <div className="floating-concierge">{panel}</div>}
-      <button className="concierge-launcher" type="button" onClick={() => setOpen(true)} aria-label="Open legal concierge">
-        <MessageCircle size={22} />
-        <span>Book</span>
+      {open && (
+        <div ref={panelRef} className="floating-concierge">
+          {panel}
+        </div>
+      )}
+      <button
+        className="concierge-launcher"
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        aria-label={open ? "Close legal concierge" : "Open legal concierge"}
+        aria-expanded={open}
+      >
+        {open ? <X size={22} /> : <MessageCircle size={22} />}
+        <span>{open ? "Close" : "Book"}</span>
       </button>
     </>
   );
