@@ -948,11 +948,13 @@ p {
 
 .concierge-card {
   width: 100%;
-  border-radius: 22px;
+  border-radius: 28px;
   border: 1px solid var(--line-strong);
-  background: var(--paper);
+  background: linear-gradient(180deg, var(--paper) 0%, var(--cream-warm) 100%);
   color: var(--espresso);
-  box-shadow: var(--shadow);
+  box-shadow:
+    0 28px 70px rgba(43, 33, 27, 0.14),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -961,40 +963,42 @@ p {
 }
 
 .concierge-header {
-  min-height: 64px;
+  min-height: 68px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  padding: 14px 18px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--line);
-  background: rgba(156, 122, 79, 0.05);
+  background: rgba(156, 122, 79, 0.06);
 }
 
 .concierge-header-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .concierge-avatar {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--bronze);
+  background: linear-gradient(135deg, var(--bronze-soft), var(--bronze));
   color: var(--paper);
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 500;
+  box-shadow: 0 4px 12px rgba(156, 122, 79, 0.25);
 }
 
 .concierge-header h3 {
   margin: 0;
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .concierge-status {
@@ -1002,7 +1006,7 @@ p {
   align-items: center;
   gap: 6px;
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
@@ -1012,21 +1016,24 @@ p {
   height: 7px;
   border-radius: 50%;
   background: #6aa868;
+  box-shadow: 0 0 0 2px rgba(106, 168, 104, 0.25);
 }
 
 .concierge-close {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   color: var(--espresso);
-  transition: background 0.2s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 .concierge-close:hover {
   background: rgba(43, 33, 27, 0.06);
+  border-color: var(--bronze-soft);
+  transform: rotate(90deg);
 }
 
 .conversation {
@@ -1034,10 +1041,10 @@ p {
   min-height: 180px;
   max-height: 300px;
   overflow-y: auto;
-  padding: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .concierge-card-embedded .conversation {
@@ -1055,18 +1062,19 @@ p {
 }
 
 .message-avatar {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--bronze);
+  background: linear-gradient(135deg, var(--bronze-soft), var(--bronze));
   color: var(--paper);
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 500;
   flex-shrink: 0;
   margin-bottom: 2px;
+  box-shadow: 0 3px 10px rgba(156, 122, 79, 0.2);
 }
 
 .message.user .message-avatar {
@@ -1074,25 +1082,25 @@ p {
 }
 
 .message-bubble {
-  max-width: 82%;
-  padding: 11px 14px;
-  border-radius: 18px;
+  max-width: 84%;
+  padding: 13px 16px;
+  border-radius: 20px;
   line-height: 1.55;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 8px rgba(43, 33, 27, 0.05);
+  font-size: 0.93rem;
+  box-shadow: 0 4px 14px rgba(43, 33, 27, 0.06);
 }
 
 .message.assistant .message-bubble {
   background: var(--cream);
   border: 1px solid var(--line);
   color: var(--espresso);
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 6px;
 }
 
 .message.user .message-bubble {
-  background: var(--bronze);
+  background: linear-gradient(135deg, var(--bronze-soft), var(--bronze));
   color: var(--paper);
-  border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 6px;
 }
 
 .typing-bubble {
@@ -1143,6 +1151,12 @@ p {
 }
 
 .choice-grid,
+.partner-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
 .slot-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1152,19 +1166,34 @@ p {
 .choice-button,
 .slot-button,
 .partner-choice {
-  min-height: 42px;
-  border-radius: 999px;
+  position: relative;
+  min-height: 48px;
+  border-radius: 14px;
   border: 1px solid var(--line-strong);
-  background: transparent;
+  background: rgba(43, 33, 27, 0.02);
   color: var(--espresso);
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: 12px;
+  padding: 12px 16px;
   text-align: left;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  overflow: hidden;
+}
+
+.choice-button::before,
+.partner-choice::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--bronze-soft);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
 .choice-button:hover,
@@ -1173,6 +1202,12 @@ p {
   border-color: var(--bronze-soft);
   background: rgba(156, 122, 79, 0.08);
   color: var(--bronze-soft);
+  transform: translateX(3px);
+}
+
+.choice-button:hover::before,
+.partner-choice:hover::before {
+  opacity: 1;
 }
 
 .choice-button svg,
@@ -1181,17 +1216,11 @@ p {
   color: var(--bronze-soft);
 }
 
-.partner-choice-grid {
-  display: grid;
-  gap: 8px;
-}
-
 .partner-choice {
-  min-height: 60px;
+  min-height: 64px;
   display: grid;
-  grid-template-columns: 26px 1fr;
+  grid-template-columns: 28px 1fr auto;
   align-items: center;
-  border-radius: 12px;
 }
 
 .partner-choice svg {
@@ -1201,12 +1230,26 @@ p {
 
 .partner-choice strong {
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.96rem;
 }
 
 .partner-choice span {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
+}
+
+.partner-choice::after {
+  content: "→";
+  grid-row: span 2;
+  color: var(--bronze-soft);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.partner-choice:hover::after {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .details-form {
@@ -1340,23 +1383,26 @@ p {
 .floating-concierge {
   position: fixed;
   right: 18px;
-  bottom: 88px;
+  bottom: 92px;
   z-index: 80;
   width: min(380px, calc(100vw - 36px));
-  max-height: min(600px, calc(100vh - 120px));
+  max-height: min(620px, calc(100vh - 120px));
 }
 
 .floating-concierge .concierge-card {
-  max-height: min(600px, calc(100vh - 120px));
+  max-height: min(620px, calc(100vh - 120px));
   min-height: auto;
-  background: var(--espresso);
-  border-color: rgba(245, 240, 230, 0.12);
+  background: linear-gradient(180deg, #332a24 0%, #231c17 100%);
+  border-color: rgba(176, 141, 92, 0.25);
   color: var(--paper);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
 }
 
 .floating-concierge .concierge-header {
-  background: rgba(245, 240, 230, 0.05);
-  border-color: rgba(245, 240, 230, 0.1);
+  background: rgba(245, 240, 230, 0.04);
+  border-color: rgba(176, 141, 92, 0.15);
 }
 
 .floating-concierge .concierge-close {
@@ -1366,6 +1412,7 @@ p {
 
 .floating-concierge .concierge-close:hover {
   background: rgba(245, 240, 230, 0.08);
+  border-color: var(--bronze-soft);
 }
 
 .floating-concierge .conversation {
@@ -1373,9 +1420,14 @@ p {
 }
 
 .floating-concierge .message.assistant .message-bubble {
-  background: rgba(245, 240, 230, 0.08);
-  border-color: rgba(245, 240, 230, 0.12);
-  color: var(--paper);
+  background: rgba(245, 240, 230, 0.07);
+  border-color: rgba(245, 240, 230, 0.1);
+  color: rgba(245, 240, 230, 0.95);
+}
+
+.floating-concierge .message.user .message-bubble {
+  background: linear-gradient(135deg, var(--bronze-light), var(--bronze-soft));
+  color: var(--espresso);
 }
 
 .floating-concierge .choice-button,
@@ -1383,27 +1435,51 @@ p {
 .floating-concierge .partner-choice,
 .floating-concierge .details-form input,
 .floating-concierge .details-form textarea {
-  border-color: rgba(245, 240, 230, 0.15);
-  color: var(--paper);
+  border-color: rgba(245, 240, 230, 0.12);
+  color: rgba(245, 240, 230, 0.92);
   background: rgba(245, 240, 230, 0.04);
+}
+
+.floating-concierge .choice-button::before,
+.floating-concierge .partner-choice::before {
+  background: var(--bronze-light);
 }
 
 .floating-concierge .choice-button:hover,
 .floating-concierge .slot-button:hover,
 .floating-concierge .partner-choice:hover {
   border-color: var(--bronze-soft);
-  background: rgba(156, 122, 79, 0.12);
+  background: rgba(156, 122, 79, 0.14);
+  color: var(--paper);
+}
+
+.floating-concierge .choice-button svg,
+.floating-concierge .slot-button svg,
+.floating-concierge .partner-choice svg {
+  color: var(--bronze-light);
 }
 
 .floating-concierge .concierge-input-bar {
   background: rgba(245, 240, 230, 0.03);
-  border-color: rgba(245, 240, 230, 0.1);
+  border-color: rgba(176, 141, 92, 0.12);
 }
 
 .floating-concierge .concierge-input-bar input {
-  background: rgba(245, 240, 230, 0.06);
-  border-color: rgba(245, 240, 230, 0.12);
+  background: rgba(245, 240, 230, 0.05);
+  border-color: rgba(245, 240, 230, 0.1);
   color: var(--paper);
+}
+
+.floating-concierge .concierge-input-bar input::placeholder {
+  color: rgba(245, 240, 230, 0.4);
+}
+
+.floating-concierge .details-form label {
+  color: rgba(245, 240, 230, 0.72);
+}
+
+.floating-concierge .muted {
+  color: rgba(245, 240, 230, 0.55);
 }
 
 .concierge-launcher {
@@ -1418,17 +1494,23 @@ p {
   justify-content: center;
   gap: 10px;
   border-radius: 999px;
-  background: var(--espresso);
+  background: linear-gradient(135deg, var(--bronze-soft), var(--bronze));
   color: var(--paper);
   font-weight: 700;
   font-size: 0.9rem;
-  box-shadow: 0 18px 48px rgba(43, 33, 27, 0.25);
-  transition: transform 0.3s ease, background 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 16px 44px rgba(43, 33, 27, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
 }
 
 .concierge-launcher:hover {
   transform: translateY(-3px);
-  background: var(--bronze);
+  filter: brightness(1.08);
+  box-shadow:
+    0 20px 52px rgba(43, 33, 27, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
 /* Testimonials dark band */
