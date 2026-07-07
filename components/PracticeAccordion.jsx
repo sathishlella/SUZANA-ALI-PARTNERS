@@ -118,7 +118,7 @@ export default function PracticeAccordion() {
                     <ChevronDown size={20} />
                   </span>
                 </button>
-                <div className="accordion-panel" style={{ maxHeight: isOpen ? 420 : 0 }}>
+                <div className={`accordion-panel ${isOpen ? "open" : ""}`}>
                   <div className="accordion-panel-inner">
                     <BlurredStagger text={group.summary} isOpen={isOpen} />
                     <ul>
