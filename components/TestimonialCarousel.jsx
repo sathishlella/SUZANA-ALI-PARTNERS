@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useLayoutEffect } from "react";
+import { useRef, useState, useEffect, useLayoutEffect } from "react";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -30,6 +30,7 @@ const testimonials = [
 
 export default function TestimonialCarousel() {
   const [active, setActive] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
 
@@ -64,13 +65,27 @@ export default function TestimonialCarousel() {
     );
   }, [active]);
 
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setActive((prev) => (prev + 1) % testimonials.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
   const next = () => setActive((prev) => (prev + 1) % testimonials.length);
   const prev = () => setActive((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  const goTo = (index) => setActive(index);
 
   const t = testimonials[active];
 
   return (
-    <section ref={sectionRef} className="testimonial-section">
+    <section
+      ref={sectionRef}
+      className="testimonial-section"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="testimonial-inner">
         <Quote size={44} className="testimonial-quote-icon" />
         <blockquote ref={contentRef} className="testimonial-quote">
@@ -89,7 +104,7 @@ export default function TestimonialCarousel() {
               <button
                 key={i}
                 className={`testimonial-dot ${i === active ? "active" : ""}`}
-                onClick={() => setActive(i)}
+                onClick={() => goTo(i)}
                 aria-label={`Show testimonial ${i + 1}`}
               />
             ))}
