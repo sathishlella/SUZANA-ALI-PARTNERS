@@ -8,6 +8,38 @@ import { practiceGroups } from "@/lib/firm-data";
 
 gsap.registerPlugin(ScrollTrigger);
 
+function BlurredStagger({ text, isOpen }) {
+  const containerRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!isOpen || !containerRef.current) return;
+    const chars = containerRef.current.querySelectorAll(".char");
+
+    gsap.fromTo(
+      chars,
+      { opacity: 0, filter: "blur(8px)", y: 8 },
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        y: 0,
+        duration: 0.45,
+        stagger: 0.012,
+        ease: "power2.out"
+      }
+    );
+  }, [isOpen]);
+
+  return (
+    <p ref={containerRef} className="blur-stagger-text">
+      {text.split("").map((char, index) => (
+        <span key={index} className="char" style={{ display: "inline-block" }}>
+          {char === " " ? "\u00A0" : char}
+        </span>
+      ))}
+    </p>
+  );
+}
+
 export default function PracticeAccordion() {
   const [openIndex, setOpenIndex] = useState(0);
   const sectionRef = useRef(null);
@@ -85,9 +117,9 @@ export default function PracticeAccordion() {
                     <ChevronDown size={22} />
                   </span>
                 </button>
-                <div className="accordion-panel" style={{ maxHeight: isOpen ? 300 : 0 }}>
+                <div className="accordion-panel" style={{ maxHeight: isOpen ? 400 : 0 }}>
                   <div className="accordion-panel-inner">
-                    <p>{group.summary}</p>
+                    <BlurredStagger text={group.summary} isOpen={isOpen} />
                     <ul>
                       {group.matters.map((matter) => (
                         <li key={matter}>{matter}</li>
