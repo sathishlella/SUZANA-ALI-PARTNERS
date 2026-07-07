@@ -113,10 +113,10 @@ export default function HomePage() {
             <div className="concierge-grid">
               <div className="concierge-copy">
                 <span className="eyebrow">Consultation</span>
-                <h2>A private intake path from first question to confirmed slot.</h2>
+                <h2>Book a private consultation.</h2>
                 <p>
-                  The first contact should feel discreet, precise and reassuring. The concierge keeps the exchange
-                  focused, collects the right essentials and routes the request to the selected partner.
+                  Choose the matter type, select the right partner, pick an available slot and share a few details. The
+                  concierge routes your request directly to the firm.
                 </p>
                 <div className="concierge-badges">
                   <span>

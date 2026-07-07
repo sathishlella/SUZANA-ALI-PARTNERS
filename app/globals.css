@@ -174,7 +174,7 @@ p {
 
 .section-header {
   max-width: 800px;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
 }
 
 .section-header.centered {
@@ -184,8 +184,8 @@ p {
 }
 
 .section-title {
-  font-size: clamp(2.2rem, 4.2vw, 4rem);
-  margin-top: 18px;
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  margin-top: 16px;
 }
 
 .section-title .accent {
@@ -364,8 +364,8 @@ p {
 /* Hero */
 .hero-section {
   position: relative;
-  min-height: 100svh;
-  min-height: 100vh;
+  min-height: 92svh;
+  min-height: 92vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -399,7 +399,7 @@ p {
   z-index: 1;
   width: min(1280px, calc(100% - 64px));
   margin: 0 auto;
-  padding: 140px 0 64px;
+  padding: 120px 0 48px;
 }
 
 .hero-content-centered {
@@ -411,9 +411,9 @@ p {
 
 .hero-portrait {
   position: relative;
-  width: min(300px, 46vw);
-  height: min(320px, 34vh);
-  margin-bottom: 6px;
+  width: min(280px, 42vw);
+  height: min(280px, 30vh);
+  margin-bottom: 4px;
   overflow: hidden;
   mask-image: linear-gradient(180deg, var(--cream) 78%, transparent 100%);
   -webkit-mask-image: linear-gradient(180deg, var(--cream) 78%, transparent 100%);
@@ -454,14 +454,14 @@ p {
   flex-wrap: wrap;
   gap: 14px;
   justify-content: center;
-  margin-top: 32px;
+  margin-top: 26px;
 }
 
 .hero-meta-row {
   display: flex;
-  gap: 56px;
-  margin-top: 52px;
-  padding-top: 32px;
+  gap: 48px;
+  margin-top: 36px;
+  padding-top: 24px;
   border-top: 1px solid rgba(245, 240, 230, 0.12);
 }
 
@@ -629,7 +629,7 @@ p {
 
 /* Practice list */
 .practices-section {
-  padding: 140px 0;
+  padding: 100px 0;
   background: var(--paper);
   border-top: 1px solid var(--line);
 }
@@ -646,10 +646,10 @@ p {
 .practice-trigger {
   width: 100%;
   display: grid;
-  grid-template-columns: 90px 1fr auto;
+  grid-template-columns: 80px 1fr auto;
   align-items: center;
-  gap: 24px;
-  padding: 34px 0;
+  gap: 20px;
+  padding: 26px 0;
   text-align: left;
   color: var(--espresso);
   transition: color 0.3s ease;
@@ -677,7 +677,7 @@ p {
 
 .practice-title {
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+  font-size: clamp(1.25rem, 2.2vw, 1.7rem);
   font-weight: 400;
   padding-right: 20px;
 }
@@ -713,15 +713,15 @@ p {
 .practice-panel-inner {
   min-height: 0;
   overflow: hidden;
-  padding: 0 0 36px 114px;
+  padding: 0 0 28px 100px;
   max-width: 760px;
 }
 
 .practice-summary {
   color: var(--espresso-dim);
-  font-size: 1.05rem;
-  line-height: 1.75;
-  margin: 0 0 20px;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0 0 16px;
 }
 
 .practice-tags {
@@ -898,16 +898,16 @@ p {
 
 /* Concierge */
 .concierge-section {
-  padding: 140px 0;
+  padding: 100px 0;
   background: var(--cream);
   border-top: 1px solid var(--line);
 }
 
 .concierge-grid {
   display: grid;
-  grid-template-columns: 1fr minmax(340px, 440px);
-  gap: 80px;
-  align-items: center;
+  grid-template-columns: 1fr minmax(340px, 420px);
+  gap: 56px;
+  align-items: start;
 }
 
 .concierge-copy {
@@ -915,39 +915,40 @@ p {
 }
 
 .concierge-copy h2 {
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
-  margin-top: 18px;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  margin-top: 16px;
+  line-height: 1.08;
 }
 
 .concierge-copy p {
   color: var(--espresso-dim);
-  font-size: 1.08rem;
-  line-height: 1.8;
-  margin: 22px 0 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 18px 0 0;
 }
 
 .concierge-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 34px;
+  gap: 10px;
+  margin-top: 26px;
 }
 
 .concierge-badges span {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 18px;
+  padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid var(--line-strong);
   color: rgba(43, 33, 27, 0.8);
-  font-size: 0.86rem;
+  font-size: 0.82rem;
   font-weight: 500;
 }
 
 .concierge-card {
   width: 100%;
-  border-radius: 24px;
+  border-radius: 22px;
   border: 1px solid var(--line-strong);
   background: var(--paper);
   color: var(--espresso);
@@ -955,8 +956,8 @@ p {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 540px;
-  max-height: 640px;
+  min-height: 460px;
+  max-height: 560px;
 }
 
 .concierge-header {
@@ -1030,13 +1031,13 @@ p {
 
 .conversation {
   flex: 1;
-  min-height: 220px;
-  max-height: 360px;
+  min-height: 180px;
+  max-height: 300px;
   overflow-y: auto;
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .concierge-card-embedded .conversation {
@@ -1341,12 +1342,12 @@ p {
   right: 18px;
   bottom: 88px;
   z-index: 80;
-  width: min(400px, calc(100vw - 36px));
-  max-height: min(640px, calc(100vh - 120px));
+  width: min(380px, calc(100vw - 36px));
+  max-height: min(600px, calc(100vh - 120px));
 }
 
 .floating-concierge .concierge-card {
-  max-height: min(640px, calc(100vh - 120px));
+  max-height: min(600px, calc(100vh - 120px));
   min-height: auto;
   background: var(--espresso);
   border-color: rgba(245, 240, 230, 0.12);
@@ -1356,6 +1357,15 @@ p {
 .floating-concierge .concierge-header {
   background: rgba(245, 240, 230, 0.05);
   border-color: rgba(245, 240, 230, 0.1);
+}
+
+.floating-concierge .concierge-close {
+  color: var(--paper);
+  border-color: rgba(245, 240, 230, 0.15);
+}
+
+.floating-concierge .concierge-close:hover {
+  background: rgba(245, 240, 230, 0.08);
 }
 
 .floating-concierge .conversation {
@@ -1858,26 +1868,26 @@ p {
   }
 
   .hero-content {
-    padding: 120px 0 64px;
+    padding: 110px 0 56px;
   }
 
   .hero-portrait {
-    width: min(280px, 54vw);
-    height: min(280px, 30vh);
+    width: min(260px, 50vw);
+    height: min(260px, 28vh);
   }
 
   .hero-meta-row {
-    gap: 40px;
-    margin-top: 44px;
+    gap: 36px;
+    margin-top: 34px;
   }
 
   .hero-scroll {
-    bottom: 18px;
+    bottom: 16px;
   }
 
   .concierge-grid {
     grid-template-columns: 1fr;
-    gap: 56px;
+    gap: 44px;
   }
 
   .concierge-copy {
@@ -1914,37 +1924,39 @@ p {
   }
 
   .hero-content {
-    padding: 110px 0 56px;
+    padding: 100px 0 48px;
   }
 
   .hero-portrait {
-    width: min(260px, 62vw);
-    height: min(260px, 28vh);
+    width: min(240px, 58vw);
+    height: min(240px, 26vh);
   }
 
   .hero-headline {
-    font-size: clamp(1.8rem, 6.5vw, 2.8rem);
+    font-size: clamp(1.7rem, 6vw, 2.6rem);
   }
 
   .hero-subtitle {
-    font-size: 0.98rem;
+    font-size: 0.95rem;
   }
 
   .hero-actions {
     gap: 12px;
+    margin-top: 22px;
   }
 
   .hero-meta-row {
-    gap: 28px;
-    margin-top: 36px;
+    gap: 24px;
+    margin-top: 28px;
+    padding-top: 18px;
   }
 
   .hero-meta-item strong {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
 
   .hero-scroll {
-    bottom: 16px;
+    bottom: 14px;
   }
 
   .practice-trigger {
@@ -1966,7 +1978,7 @@ p {
   }
 
   .concierge-card {
-    min-height: 520px;
+    min-height: 460px;
   }
 
   .testimonial-section {
