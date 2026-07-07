@@ -175,12 +175,12 @@ export default function HomePage() {
                   padding: "22px",
                   borderRadius: "12px",
                   border: "1px solid var(--line)",
-                  background: "var(--panel)",
+                  background: "var(--paper)",
                   minHeight: "96px"
                 }}
               >
-                <Scale size={18} style={{ color: "var(--orange-soft)", flexShrink: 0, marginTop: "3px" }} />
-                <span style={{ fontSize: "0.95rem", lineHeight: "1.45", color: "var(--ivory-dim)" }}>{name}</span>
+                <Scale size={18} style={{ color: "var(--bronze-soft)", flexShrink: 0, marginTop: "3px" }} />
+                <span style={{ fontSize: "0.95rem", lineHeight: "1.45", color: "var(--espresso-dim)" }}>{name}</span>
               </div>
             ))}
           </div>
