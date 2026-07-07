@@ -248,7 +248,7 @@ export default function LegalConcierge({ embedded = false }) {
           : "Type your message...";
 
   const panel = (
-    <section className={embedded ? "concierge concierge-embedded" : "concierge"} id="concierge">
+    <section className={`concierge-card ${embedded ? "concierge-card-embedded" : ""}`} id="concierge">
       <div className="concierge-header">
         <div className="concierge-header-info">
           <div className="concierge-avatar">
@@ -260,7 +260,7 @@ export default function LegalConcierge({ embedded = false }) {
           </div>
         </div>
         {!embedded && (
-          <button className="icon-button" type="button" onClick={() => setOpen(false)} aria-label="Close concierge">
+          <button className="concierge-close" type="button" onClick={() => setOpen(false)} aria-label="Close concierge">
             <X size={18} />
           </button>
         )}

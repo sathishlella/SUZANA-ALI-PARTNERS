@@ -37,11 +37,11 @@ export default function TestimonialCarousel() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         sectionRef.current,
-        { y: 50, opacity: 0 },
+        { opacity: 0, y: 40 },
         {
-          y: 0,
           opacity: 1,
-          duration: 0.9,
+          y: 0,
+          duration: 1,
           ease: "power3.out",
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -59,8 +59,8 @@ export default function TestimonialCarousel() {
     if (!contentRef.current) return;
     gsap.fromTo(
       contentRef.current,
-      { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
     );
   }, [active]);
 
@@ -72,16 +72,13 @@ export default function TestimonialCarousel() {
   return (
     <section ref={sectionRef} className="testimonial-section">
       <div className="testimonial-inner">
-        <span className="eyebrow">Client Perspective</span>
-        <div className="testimonial-card">
-          <Quote size={36} className="testimonial-quote-icon" />
-          <blockquote ref={contentRef} className="testimonial-quote">
-            “{t.quote}”
-          </blockquote>
-          <div className="testimonial-author">
-            <strong>{t.author}</strong>
-            <span>{t.role}</span>
-          </div>
+        <Quote size={44} className="testimonial-quote-icon" />
+        <blockquote ref={contentRef} className="testimonial-quote">
+          &ldquo;{t.quote}&rdquo;
+        </blockquote>
+        <div className="testimonial-author">
+          <strong>{t.author}</strong>
+          <span>{t.role}</span>
         </div>
         <div className="testimonial-controls">
           <button onClick={prev} aria-label="Previous testimonial" className="testimonial-control">

@@ -30,7 +30,7 @@ function BlurredStagger({ text, isOpen }) {
   }, [isOpen]);
 
   return (
-    <p ref={containerRef} className="blur-stagger-text">
+    <p ref={containerRef} className="practice-summary">
       {text.split("").map((char, index) => (
         <span key={index} className="char" style={{ display: "inline-block" }}>
           {char === " " ? "\u00A0" : char}
@@ -44,7 +44,7 @@ export default function PracticeAccordion() {
   const [openIndex, setOpenIndex] = useState(0);
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const cardsRef = useRef([]);
+  const itemsRef = useRef([]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -65,8 +65,8 @@ export default function PracticeAccordion() {
       );
 
       gsap.fromTo(
-        cardsRef.current,
-        { y: 48, opacity: 0 },
+        itemsRef.current,
+        { y: 40, opacity: 0 },
         {
           y: 0,
           opacity: 1,
@@ -91,7 +91,7 @@ export default function PracticeAccordion() {
 
   return (
     <section ref={sectionRef} id="practices" className="practices-section">
-      <div className="section-inner">
+      <div className="container">
         <div ref={headerRef} className="section-header">
           <span className="eyebrow">Practice Areas</span>
           <h2 className="section-title">
@@ -99,7 +99,7 @@ export default function PracticeAccordion() {
           </h2>
         </div>
 
-        <div className="accordion">
+        <div className="practice-list">
           {practiceGroups.map((group, index) => {
             const isOpen = openIndex === index;
             const number = String(index + 1).padStart(2, "0");
@@ -107,21 +107,20 @@ export default function PracticeAccordion() {
             return (
               <div
                 key={group.title}
-                ref={(el) => (cardsRef.current[index] = el)}
-                className={`accordion-card ${isOpen ? "open" : ""}`}
+                ref={(el) => (itemsRef.current[index] = el)}
+                className={`practice-item ${isOpen ? "open" : ""}`}
               >
-                <div className="accordion-card-border" aria-hidden="true" />
-                <button className="accordion-trigger" onClick={() => toggle(index)} aria-expanded={isOpen}>
-                  <span className="accordion-number">{number}</span>
-                  <span className="accordion-title">{group.title}</span>
-                  <span className="accordion-icon">
+                <button className="practice-trigger" onClick={() => toggle(index)} aria-expanded={isOpen}>
+                  <span className="practice-number">{number}</span>
+                  <span className="practice-title">{group.title}</span>
+                  <span className="practice-icon">
                     <ChevronDown size={20} />
                   </span>
                 </button>
-                <div className={`accordion-panel ${isOpen ? "open" : ""}`}>
-                  <div className="accordion-panel-inner">
+                <div className={`practice-panel ${isOpen ? "open" : ""}`}>
+                  <div className="practice-panel-inner">
                     <BlurredStagger text={group.summary} isOpen={isOpen} />
-                    <ul>
+                    <ul className="practice-tags">
                       {group.matters.map((matter) => (
                         <li key={matter}>{matter}</li>
                       ))}
