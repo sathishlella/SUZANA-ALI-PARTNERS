@@ -85,7 +85,15 @@ export default function PartnerStack() {
                 )}
                 <h3>{partner.name}</h3>
                 <span className="partner-role">{partner.title}</span>
-                {partner.qualification && <p className="partner-qualification">{partner.qualification}</p>}
+                {partner.qualification && (
+                  <p className="partner-qualification">
+                    {partner.qualification.split(";").map((line, index) => (
+                      <span className="qual-line" key={index}>
+                        {line.trim()}
+                      </span>
+                    ))}
+                  </p>
+                )}
               </article>
             );
           })}
