@@ -32,7 +32,6 @@ export default function TestimonialCarousel() {
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const sectionRef = useRef(null);
-  const contentRef = useRef(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -55,15 +54,6 @@ export default function TestimonialCarousel() {
 
     return () => ctx.revert();
   }, []);
-
-  useLayoutEffect(() => {
-    if (!contentRef.current) return;
-    gsap.fromTo(
-      contentRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-    );
-  }, [active]);
 
   useEffect(() => {
     if (isPaused) return;
@@ -88,13 +78,26 @@ export default function TestimonialCarousel() {
     >
       <div className="testimonial-inner">
         <Quote size={44} className="testimonial-quote-icon" />
-        <blockquote ref={contentRef} className="testimonial-quote">
-          &ldquo;{t.quote}&rdquo;
-        </blockquote>
-        <div className="testimonial-author">
+
+        {/* All quotes share one grid cell, so the band always reserves the
+            height of the tallest quote — the background never resizes. */}
+        <div className="testimonial-quote-stack">
+          {testimonials.map((item, i) => (
+            <blockquote
+              key={i}
+              className={`testimonial-quote ${i === active ? "is-active" : ""}`}
+              aria-hidden={i !== active}
+            >
+              &ldquo;{item.quote}&rdquo;
+            </blockquote>
+          ))}
+        </div>
+
+        <div className="testimonial-author" key={active}>
           <strong>{t.author}</strong>
           <span>{t.role}</span>
         </div>
+
         <div className="testimonial-controls">
           <button onClick={prev} aria-label="Previous testimonial" className="testimonial-control">
             <ChevronLeft size={22} />

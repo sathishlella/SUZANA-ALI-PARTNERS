@@ -1,20 +1,20 @@
 import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
-import { firm, matterTypes, partners } from "@/lib/firm-data";
+import { firm, matterTypes } from "@/lib/firm-data";
 
 const fallbackReplies = {
   greeting:
-    "Good day. I can help you arrange a consultation with the right partner. Could you tell me which type of matter this concerns?",
+    "Good day. I can help you arrange a consultation at the office that suits you best. Could you tell me which type of matter this concerns?",
   matter:
-    "Thank you. For this matter, I can help you choose a partner and hold a suitable appointment slot.",
-  partner:
-    "Understood. I will check available consultation slots and keep the appointment request concise.",
+    "Thank you. I can help you choose the most convenient office and hold a suitable appointment slot.",
+  office:
+    "Understood. I will check available consultation slots at that office and keep the request concise.",
   slot:
     "That time works. May I have your name, email and phone number so the firm can confirm the consultation?",
   details:
     "Thank you. I have enough information to prepare the booking request now.",
   booked:
-    "Your consultation request has been received. A confirmation has been prepared for you and the selected partner.",
+    "Your consultation request has been received. A confirmation has been prepared for you and the selected office.",
   default:
     "I understand. I will keep this focused and help you move toward the right consultation."
 };
@@ -49,7 +49,7 @@ export async function POST(request) {
             "Ask one focused question at a time and keep replies under 45 words.",
             "If booking details are ready, warmly confirm that the request can be submitted.",
             `Available matter types: ${matterTypes.join(", ")}.`,
-            `Partners: ${partners.map((partner) => `${partner.name} (${partner.title})`).join(", ")}.`
+            `Offices: ${firm.offices.map((office) => office.label).join(", ")}.`
           ].join(" ")
         },
         {

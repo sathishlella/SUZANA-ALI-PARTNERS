@@ -8,32 +8,21 @@ import { practiceGroups } from "@/lib/firm-data";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function BlurredStagger({ text, isOpen }) {
-  const containerRef = useRef(null);
-
-  useLayoutEffect(() => {
-    if (!isOpen || !containerRef.current) return;
-    const chars = containerRef.current.querySelectorAll(".char");
-
-    gsap.fromTo(
-      chars,
-      { opacity: 0, filter: "blur(8px)", y: 8 },
-      {
-        opacity: 1,
-        filter: "blur(0px)",
-        y: 0,
-        duration: 0.45,
-        stagger: 0.012,
-        ease: "power2.out"
-      }
-    );
-  }, [isOpen]);
-
+/**
+ * Renders the summary as whole, unbreakable words so a line can only ever wrap
+ * at a space — never mid-word. Each word carries its stagger index (`--i`) so
+ * the reveal animation is driven entirely by CSS (no JS/CSS desync on hover).
+ */
+function PracticeSummary({ text }) {
+  const words = text.split(" ");
   return (
-    <p ref={containerRef} className="practice-summary">
-      {text.split("").map((char, index) => (
-        <span key={index} className="char" style={{ display: "inline-block" }}>
-          {char === " " ? "\u00A0" : char}
+    <p className="practice-summary">
+      {words.map((word, i) => (
+        <span className="summary-word-wrap" key={`${word}-${i}`}>
+          <span className="word" style={{ "--i": i }}>
+            {word}
+          </span>
+          {i < words.length - 1 ? " " : ""}
         </span>
       ))}
     </p>
@@ -41,7 +30,7 @@ function BlurredStagger({ text, isOpen }) {
 }
 
 export default function PracticeAccordion() {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(-1);
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const itemsRef = useRef([]);
@@ -110,19 +99,30 @@ export default function PracticeAccordion() {
                 ref={(el) => (itemsRef.current[index] = el)}
                 className={`practice-item ${isOpen ? "open" : ""}`}
               >
-                <button className="practice-trigger" onClick={() => toggle(index)} aria-expanded={isOpen}>
+                <button
+                  className="practice-trigger"
+                  onClick={() => toggle(index)}
+                  aria-expanded={isOpen}
+                  aria-controls={`practice-panel-${index}`}
+                >
                   <span className="practice-number">{number}</span>
                   <span className="practice-title">{group.title}</span>
                   <span className="practice-icon">
                     <ChevronDown size={20} />
                   </span>
                 </button>
-                <div className={`practice-panel ${isOpen ? "open" : ""}`}>
+                <div
+                  className={`practice-panel ${isOpen ? "open" : ""}`}
+                  id={`practice-panel-${index}`}
+                  role="region"
+                >
                   <div className="practice-panel-inner">
-                    <BlurredStagger text={group.summary} isOpen={isOpen} />
+                    <PracticeSummary text={group.summary} />
                     <ul className="practice-tags">
-                      {group.matters.map((matter) => (
-                        <li key={matter}>{matter}</li>
+                      {group.matters.map((matter, tagIndex) => (
+                        <li key={matter} style={{ "--i": tagIndex }}>
+                          {matter}
+                        </li>
                       ))}
                     </ul>
                   </div>

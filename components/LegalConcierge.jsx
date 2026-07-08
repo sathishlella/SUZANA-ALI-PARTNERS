@@ -1,28 +1,23 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useCallback } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
   CalendarCheck,
   Check,
   Clock,
   Loader2,
   Mail,
+  MapPin,
   MessageCircle,
   Send,
   Sparkles,
-  UserRound,
   X,
   CornerDownLeft
 } from "lucide-react";
-import { matterTypes, partners } from "@/lib/firm-data";
+import { matterTypes, firm } from "@/lib/firm-data";
 
 const intro =
-  "Good day. I can help you arrange a consultation with the right partner. Could you tell me which type of matter this concerns?";
-
-function partnerLabel(partnerId) {
-  return partners.find((partner) => partner.id === partnerId)?.name || "Suzana Ali";
-}
+  "Good day. I can help you arrange a consultation at the office that suits you best. Could you tell me which type of matter this concerns?";
 
 function initialMessages() {
   return [{ role: "assistant", content: intro }];
@@ -34,7 +29,7 @@ export default function LegalConcierge({ embedded = false }) {
   const [stage, setStage] = useState("matter");
   const [context, setContext] = useState({
     matterType: "",
-    partnerId: "suzana",
+    officeId: firm.offices[0].id,
     slotId: "",
     slotLabel: "",
     clientName: "",
@@ -55,9 +50,9 @@ export default function LegalConcierge({ embedded = false }) {
   const scroller = useRef(null);
   const panelRef = useRef(null);
 
-  const selectedPartner = useMemo(
-    () => partners.find((partner) => partner.id === context.partnerId) || partners[0],
-    [context.partnerId]
+  const selectedOffice = useMemo(
+    () => firm.offices.find((office) => office.id === context.officeId) || firm.offices[0],
+    [context.officeId]
   );
 
   useEffect(() => {
@@ -70,6 +65,15 @@ export default function LegalConcierge({ embedded = false }) {
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
+
+  // Let any element on the page open this single floating concierge
+  // (e.g. the "Book a consultation" CTA in the consultation section).
+  useEffect(() => {
+    if (embedded) return;
+    const handleOpen = () => setOpen(true);
+    window.addEventListener("open-concierge", handleOpen);
+    return () => window.removeEventListener("open-concierge", handleOpen);
+  }, [embedded]);
 
   useEffect(() => {
     if (embedded || !open) return;
@@ -135,20 +139,21 @@ export default function LegalConcierge({ embedded = false }) {
     const nextContext = { ...context, matterType };
     setContext(nextContext);
     const nextMessages = pushUser(matterType);
-    setStage("partner");
+    setStage("office");
     await conciergeReply("matter", nextContext, nextMessages);
   }
 
-  async function choosePartner(partnerId) {
-    const nextContext = { ...context, partnerId, slotId: "", slotLabel: "" };
+  async function chooseOffice(officeId) {
+    const nextContext = { ...context, officeId, slotId: "", slotLabel: "" };
     setContext(nextContext);
     setSlots([]);
-    const nextMessages = pushUser(`I would like to meet ${partnerLabel(partnerId)}.`);
+    const office = firm.offices.find((o) => o.id === officeId) || firm.offices[0];
+    const nextMessages = pushUser(`I would like to meet at ${office.label}.`);
     setStage("slot");
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`/api/availability?partner=${encodeURIComponent(partnerId)}`);
+      const response = await fetch(`/api/availability?office=${encodeURIComponent(officeId)}`);
       const data = await response.json();
       setSlots(data.slots || []);
     } catch {
@@ -156,7 +161,7 @@ export default function LegalConcierge({ embedded = false }) {
     } finally {
       setLoading(false);
     }
-    await conciergeReply("partner", nextContext, nextMessages);
+    await conciergeReply("office", nextContext, nextMessages);
   }
 
   async function chooseSlot(slot) {
@@ -194,7 +199,7 @@ export default function LegalConcierge({ embedded = false }) {
         ...current,
         {
           role: "assistant",
-          content: `Thank you, ${data.booking.clientName}. Your consultation request with ${data.booking.partnerName} for ${data.booking.slotLabel} has been received. Reference ${data.booking.id}.`
+          content: `Thank you, ${data.booking.clientName}. Your consultation request for ${data.booking.officeLabel} on ${data.booking.slotLabel} has been received. Reference ${data.booking.id}.`
         }
       ]);
     } catch (bookingError) {
@@ -218,7 +223,7 @@ export default function LegalConcierge({ embedded = false }) {
     setStage("matter");
     setContext({
       matterType: "",
-      partnerId: "suzana",
+      officeId: firm.offices[0].id,
       slotId: "",
       slotLabel: "",
       clientName: "",
@@ -237,18 +242,18 @@ export default function LegalConcierge({ embedded = false }) {
     });
   }
 
-  const showInputFooter = stage === "matter" || stage === "partner" || stage === "slot";
+  const showInputFooter = stage === "matter" || stage === "office" || stage === "slot";
   const inputPlaceholder =
     stage === "matter"
       ? "Select a matter type above..."
-      : stage === "partner"
-        ? "Select a partner above..."
+      : stage === "office"
+        ? "Select an office above..."
         : stage === "slot"
           ? "Select an available slot above..."
           : "Type your message...";
 
   const panel = (
-    <section className={`concierge-card ${embedded ? "concierge-card-embedded" : ""}`} id="concierge">
+    <section className={`concierge-card ${embedded ? "concierge-card-embedded" : ""}`}>
       <div className="concierge-header">
         <div className="concierge-header-info">
           <div className="concierge-avatar">
@@ -266,8 +271,9 @@ export default function LegalConcierge({ embedded = false }) {
         )}
       </div>
 
-      <div className="conversation" ref={scroller}>
-        {messages.map((message, index) => (
+      <div className="concierge-scroll" ref={scroller}>
+        <div className="conversation">
+          {messages.map((message, index) => (
           <div className={`message ${message.role}`} key={`${message.role}-${index}`}>
             {message.role === "assistant" && (
               <div className="message-avatar" aria-hidden="true">
@@ -309,13 +315,13 @@ export default function LegalConcierge({ embedded = false }) {
           </div>
         )}
 
-        {stage === "partner" && (
-          <div className="partner-choice-grid">
-            {partners.map((partner) => (
-              <button type="button" className="partner-choice" key={partner.id} onClick={() => choosePartner(partner.id)}>
-                <UserRound size={17} />
-                <strong>{partner.name}</strong>
-                <span>{partner.title}</span>
+        {stage === "office" && (
+          <div className="office-choice-grid">
+            {firm.offices.map((office) => (
+              <button type="button" className="office-choice" key={office.id} onClick={() => chooseOffice(office.id)}>
+                <MapPin size={17} />
+                <strong>{office.label}</strong>
+                <span>{office.city}</span>
               </button>
             ))}
           </div>
@@ -329,7 +335,7 @@ export default function LegalConcierge({ embedded = false }) {
                 <span>{slot.label}</span>
               </button>
             ))}
-            {!loading && slots.length === 0 && <p className="muted">No online slots are available for {selectedPartner.name}.</p>}
+            {!loading && slots.length === 0 && <p className="muted">No online slots are available for {selectedOffice.label}.</p>}
           </div>
         )}
 
@@ -383,7 +389,7 @@ export default function LegalConcierge({ embedded = false }) {
               <Check size={18} />
             </div>
             <strong>{booking.id}</strong>
-            <span>{booking.partnerName}</span>
+            <span>{booking.officeLabel}</span>
             <span>{booking.slotLabel}</span>
             <button className="ghost-button" type="button" onClick={resetConversation}>
               <Clock size={15} />
@@ -391,6 +397,7 @@ export default function LegalConcierge({ embedded = false }) {
             </button>
           </div>
         )}
+        </div>
       </div>
 
       {showInputFooter && (

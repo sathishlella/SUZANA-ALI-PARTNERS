@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useLayoutEffect } from "react";
-import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { partners } from "@/lib/firm-data";
@@ -56,11 +55,11 @@ export default function PartnerStack() {
     <section ref={sectionRef} id="partners" className="partners-section">
       <div className="container">
         <div ref={headerRef} className="section-header centered">
-          <span className="eyebrow">Partners</span>
+          <span className="eyebrow">Advocates &amp; Solicitors</span>
           <h2 className="section-title">
             Counsel your matter <span className="accent">deserves.</span>
           </h2>
-          <p className="section-lead">Three partners, distinct strengths, one standard: clear judgment and direct access.</p>
+          <p className="section-lead">One firm, shared standards: clear judgment and direct access.</p>
         </div>
 
         <div className="partners-grid">
@@ -86,11 +85,7 @@ export default function PartnerStack() {
                 )}
                 <h3>{partner.name}</h3>
                 <span className="partner-role">{partner.title}</span>
-                <p className="partner-focus">{partner.focus}</p>
-                <a href="#contact" className="partner-link">
-                  Contact office
-                  <ArrowRight size={16} />
-                </a>
+                {partner.qualification && <p className="partner-qualification">{partner.qualification}</p>}
               </article>
             );
           })}

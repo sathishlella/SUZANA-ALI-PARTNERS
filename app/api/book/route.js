@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import {
-  availabilityFor,
-  getPartner,
+  availabilityForOffice,
+  getOffice,
   makeBookingId,
-  partnerEmail,
+  officeEmail,
   publicBooking,
   writeBooking
 } from "@/lib/booking";
@@ -21,7 +21,7 @@ export async function POST(request) {
   const body = await request.json().catch(() => null);
   if (!body) return invalid("Invalid booking request.");
 
-  const partner = getPartner(clean(body.partnerId));
+  const office = getOffice(clean(body.officeId));
   const slotId = clean(body.slotId);
   const matterType = clean(body.matterType);
   const clientName = clean(body.clientName);
@@ -37,7 +37,7 @@ export async function POST(request) {
     return invalid("Please provide a valid email address.");
   }
 
-  const slots = await availabilityFor(partner.id);
+  const slots = await availabilityForOffice(office.id);
   const slot = slots.find((candidate) => candidate.id === slotId);
   if (!slot) {
     return invalid("That appointment slot is no longer available.", 409);
@@ -46,9 +46,9 @@ export async function POST(request) {
   const booking = {
     id: makeBookingId(),
     createdAt: new Date().toISOString(),
-    partnerId: partner.id,
-    partnerName: partner.name,
-    partnerEmail: partnerEmail(partner.id),
+    officeId: office.id,
+    officeLabel: office.label,
+    officeEmail: officeEmail(office),
     slotId,
     slotDate: slot.date,
     slotTime: slot.time,

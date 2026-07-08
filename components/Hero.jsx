@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useLayoutEffect } from "react";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown, Phone } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { firm } from "@/lib/firm-data";
@@ -11,7 +11,6 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Hero() {
   const sectionRef = useRef(null);
   const bgRef = useRef(null);
-  const portraitRef = useRef(null);
   const eyebrowRef = useRef(null);
   const headlineRef = useRef(null);
   const subRef = useRef(null);
@@ -21,17 +20,15 @@ export default function Hero() {
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    const portrait = portraitRef.current;
     const words = headlineRef.current?.querySelectorAll(".word");
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.fromTo(portrait, { y: 60, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 1.2 })
-        .fromTo(eyebrowRef.current, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, "-=0.7")
-        .fromTo(words, { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.08 }, "-=0.5")
-        .fromTo(subRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9 }, "-=0.6")
-        .fromTo(ctaRef.current, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, "-=0.6")
+      tl.fromTo(eyebrowRef.current, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9 })
+        .fromTo(words, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.08 }, "-=0.4")
+        .fromTo(subRef.current, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.85 }, "-=0.55")
+        .fromTo(ctaRef.current, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, "-=0.55")
         .fromTo(metaRef.current, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, "-=0.5");
 
       gsap.to(scrollRef.current, {
@@ -43,19 +40,8 @@ export default function Hero() {
         ease: "power1.inOut"
       });
 
-      gsap.to(portrait, {
-        yPercent: 6,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-
       gsap.to(bgRef.current, {
-        yPercent: 10,
+        yPercent: 8,
         ease: "none",
         scrollTrigger: {
           trigger: section,
@@ -69,19 +55,16 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
-  const title = "Counsel for matters that demand judgment.";
+  const title = "Your trusted advocates for life’s defining moments";
   const words = title.split(" ");
-  const accentIndex = words.indexOf("judgment.");
+  const accentIndex = words.indexOf("trusted");
 
   return (
     <section ref={sectionRef} className="hero-section" id="top">
       <div ref={bgRef} className="hero-bg" />
       <div className="hero-overlay" />
       <div className="hero-content hero-content-centered">
-        <div ref={portraitRef} className="hero-portrait">
-          <img src="/images/suzana-portrait.png" alt="Suzana Ali, Founding Partner" />
-        </div>
-        <span ref={eyebrowRef} className="eyebrow hero-eyebrow">{firm.descriptor}</span>
+        <span ref={eyebrowRef} className="eyebrow hero-eyebrow">{firm.descriptor.toUpperCase()}</span>
         <h1 ref={headlineRef} className="display-lg hero-headline">
           {words.map((word, i) => (
             <span
@@ -94,13 +77,13 @@ export default function Hero() {
           ))}
         </h1>
         <p ref={subRef} className="hero-subtitle">
-          Banking, property, litigation and corporate counsel across Malaysia. Led by partners trusted by institutions
-          and individuals.
+          Banking, property, litigation and corporate counsel across Malaysia. A firm built on clear judgment,
+          teamwork and direct access.
         </p>
         <div ref={ctaRef} className="hero-actions">
-          <a href="#concierge" className="button button-primary">
-            Request Consultation
-            <ArrowRight size={18} />
+          <a href={`tel:${firm.primaryPhone.replace(/\s/g, "")}`} className="button button-primary">
+            <Phone size={18} />
+            Call us
           </a>
           <a href={firm.profileUrl} className="button button-light">
             Download Firm Profile
@@ -108,12 +91,8 @@ export default function Hero() {
         </div>
         <div ref={metaRef} className="hero-meta-row">
           <div className="hero-meta-item">
-            <strong>2020</strong>
-            <span>Established</span>
-          </div>
-          <div className="hero-meta-item">
             <strong>3</strong>
-            <span>Partners</span>
+            <span>Offices</span>
           </div>
           <div className="hero-meta-item">
             <strong>14</strong>

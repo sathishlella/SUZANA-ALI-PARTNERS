@@ -84,8 +84,8 @@ export default function HomePage() {
               <div className="firm-body">
                 <div className="firm-copy">
                   <p>
-                    Suzana Ali &amp; Partners provides comprehensive legal services through two strategically located
-                    Malaysian offices. The firm brings together three partners across banking, property, civil
+                    Suzana Ali &amp; Partners provides comprehensive legal services through three strategically located
+                    Malaysian offices. The firm brings together advocates and solicitors across banking, property, civil
                     litigation, debt recovery, commercial and contractual disputes, corporate law, enforcement
                     proceedings and probate matters.
                   </p>
@@ -93,11 +93,6 @@ export default function HomePage() {
                     The website experience is designed around the same promise: clear judgment, discreet intake and
                     direct access to the right legal team.
                   </p>
-                </div>
-                <div className="firm-stat">
-                  <span>Professional Indemnity</span>
-                  <strong>{firm.indemnity}</strong>
-                  <p>Coverage supported by Pacific &amp; Orient Insurance Co. Berhad and Lonpac Insurance Berhad.</p>
                 </div>
               </div>
             </div>
@@ -110,27 +105,32 @@ export default function HomePage() {
 
         <section className="concierge-section" id="concierge">
           <div className="container">
-            <div className="concierge-grid">
-              <div className="concierge-copy">
-                <span className="eyebrow">Consultation</span>
-                <h2>Book a private consultation.</h2>
-                <p>
-                  Choose the matter type, select the right partner, pick an available slot and share a few details. The
-                  concierge routes your request directly to the firm.
-                </p>
-                <div className="concierge-badges">
-                  <span>
-                    <Clock size={14} /> 10-minute setup
-                  </span>
-                  <span>
-                    <Check size={14} /> Partner-matched
-                  </span>
-                  <span>
-                    <ShieldCheck size={14} /> Confidential
-                  </span>
-                </div>
+            <div className="consult-cta">
+              <span className="eyebrow">Consultation</span>
+              <h2>Book a private consultation.</h2>
+              <p>
+                Choose the matter type, select your preferred office, pick an available slot and share a few details.
+                The concierge routes your request directly to the firm.
+              </p>
+              <div className="concierge-badges">
+                <span>
+                  <Clock size={14} /> 10-minute setup
+                </span>
+                <span>
+                  <Check size={14} /> Office-matched
+                </span>
+                <span>
+                  <ShieldCheck size={14} /> Confidential
+                </span>
               </div>
-              <LegalConcierge embedded />
+              <button
+                type="button"
+                className="button button-primary consult-cta-button"
+                onClick={() => window.dispatchEvent(new CustomEvent("open-concierge"))}
+              >
+                <CalendarCheck size={18} />
+                Book a consultation
+              </button>
             </div>
           </div>
         </section>
@@ -147,10 +147,16 @@ export default function HomePage() {
               </h2>
             </div>
             <div className="panel-grid">
-              {panelPartners.map((name) => (
-                <div key={name} className="panel-item">
-                  <Scale size={18} style={{ color: "var(--bronze-soft)", flexShrink: 0, marginTop: "3px" }} />
-                  <span>{name}</span>
+              {panelPartners.map((partner) => (
+                <div key={partner.name} className="panel-item">
+                  <div className="panel-logo">
+                    {partner.logo ? (
+                      <img src={partner.logo} alt={`${partner.name} logo`} loading="lazy" />
+                    ) : (
+                      <Scale size={22} style={{ color: "var(--bronze-soft)" }} />
+                    )}
+                  </div>
+                  <span>{partner.name}</span>
                 </div>
               ))}
             </div>
@@ -162,7 +168,7 @@ export default function HomePage() {
             <div className="section-header centered">
               <span className="eyebrow">Offices</span>
               <h2 className="section-title">
-                Petaling Jaya and <span className="accent">Seremban.</span>
+                Petaling Jaya, Seremban and <span className="accent">Ipoh.</span>
               </h2>
             </div>
             <div className="office-grid">
@@ -183,9 +189,9 @@ export default function HomePage() {
               ))}
             </div>
             <div className="final-cta">
-              <a href="#concierge" className="button button-primary">
-                Start Consultation Request
-                <ArrowRight size={18} />
+              <a href={`tel:${firm.primaryPhone.replace(/\s/g, "")}`} className="button button-primary">
+                <Phone size={18} />
+                Call us
               </a>
             </div>
           </div>
@@ -222,7 +228,7 @@ export default function HomePage() {
                 <span>Navigate</span>
                 <a href="#firm">Our Firm</a>
                 <a href="#practices">Practices</a>
-                <a href="#partners">Partners</a>
+                <a href="#partners">Advocates &amp; Solicitors</a>
                 <a href="#insights">Insights</a>
                 <a href="#contact">Contact</a>
               </div>
@@ -239,8 +245,9 @@ export default function HomePage() {
                 <span>Contact</span>
                 <a href={`tel:${firm.primaryPhone.replace(/\s/g, "")}`}>{firm.primaryPhone}</a>
                 <a href={`mailto:${firm.klEmail}`}>{firm.klEmail}</a>
-                <p>{firm.offices[0].label}</p>
-                <p>{firm.offices[1].label}</p>
+                {firm.offices.map((office) => (
+                  <p key={office.id}>{office.label}</p>
+                ))}
               </div>
             </div>
 
