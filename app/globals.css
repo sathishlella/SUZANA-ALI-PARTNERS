@@ -2213,6 +2213,20 @@ p {
   transition: color 0.3s ease;
 }
 
+/* Each office block in the footer: label + phone + email grouped tightly */
+.footer-office {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.footer-office strong {
+  margin-bottom: 2px;
+  color: rgba(245, 240, 230, 0.92);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
 .footer-col a:hover {
   color: var(--paper);
 }

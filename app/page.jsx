@@ -226,8 +226,13 @@ export default function HomePage() {
 
               <div className="footer-col">
                 <span>Contact</span>
-                <a href={`tel:${firm.primaryPhone.replace(/\s/g, "")}`}>{firm.primaryPhone}</a>
-                <a href={`mailto:${firm.klEmail}`}>{firm.klEmail}</a>
+                {firm.offices.map((office) => (
+                  <div className="footer-office" key={office.id}>
+                    <strong>{office.label}</strong>
+                    <a href={`tel:${office.phone.split("/")[0].trim().replace(/\s/g, "")}`}>{office.phone}</a>
+                    <a href={`mailto:${office.email}`}>{office.email}</a>
+                  </div>
+                ))}
               </div>
             </div>
 
