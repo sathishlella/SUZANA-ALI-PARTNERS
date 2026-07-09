@@ -15,6 +15,7 @@ const fallbackReplies = {
     "Thank you. I have enough information to prepare the booking request now.",
   booked:
     "Your consultation request has been received. A confirmation has been prepared for you and the selected office.",
+  freeform: `Thank you for your message. I can help you arrange a consultation — please choose an option above, or call the firm at ${firm.primaryPhone} and our team will assist you directly.`,
   default:
     "I understand. I will keep this focused and help you move toward the right consultation."
 };
@@ -43,13 +44,15 @@ export async function POST(request) {
         {
           role: "system",
           content: [
-            `You are the appointment concierge for ${firm.name}, ${firm.descriptor} in Malaysia.`,
+            `You are the concierge for ${firm.name}, ${firm.descriptor} in Malaysia.`,
             "Sound like a calm, capable human legal assistant, not a bot.",
-            "Do not provide legal advice, predictions, fees, or lawyer-client privilege claims.",
-            "Ask one focused question at a time and keep replies under 45 words.",
-            "If booking details are ready, warmly confirm that the request can be submitted.",
+            "Answer the visitor's questions about the firm's practice areas, offices, and how to book, warmly and concisely.",
+            "Do not provide legal advice, case predictions, fee quotes, or lawyer-client privilege claims.",
+            "When helpful, guide the visitor toward booking a consultation using the options in the panel, or calling the firm.",
+            "Keep every reply under 45 words and ask at most one focused question.",
             `Available matter types: ${matterTypes.join(", ")}.`,
-            `Offices: ${firm.offices.map((office) => office.label).join(", ")}.`
+            `Offices: ${firm.offices.map((office) => office.label).join(", ")}.`,
+            `Firm phone: ${firm.primaryPhone}.`
           ].join(" ")
         },
         {

@@ -47,6 +47,7 @@ export default function LegalConcierge({ embedded = false }) {
     clientPhone: "",
     notes: ""
   });
+  const [userInput, setUserInput] = useState("");
   const scroller = useRef(null);
   const panelRef = useRef(null);
 
@@ -133,6 +134,41 @@ export default function LegalConcierge({ embedded = false }) {
     const next = [...messages, { role: "user", content }];
     setMessages(next);
     return next;
+  }
+
+  // Free-text message: send what the visitor typed to the assistant and show the reply.
+  // The booking buttons/forms above continue to work independently.
+  async function sendMessage(event) {
+    if (event) event.preventDefault();
+    const text = userInput.trim();
+    if (!text || loading) return;
+    setUserInput("");
+    const nextMessages = [...messages, { role: "user", content: text }];
+    setMessages(nextMessages);
+    setLoading(true);
+    setError("");
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stage: "freeform", context, transcript: nextMessages })
+      });
+      const data = await response.json();
+      const content =
+        data.reply ||
+        "Thank you for your message. You can choose an option above to book, or call the firm and our team will assist you.";
+      setMessages((current) => [...current, { role: "assistant", content }]);
+    } catch {
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          content: "I couldn't reach the assistant just now. Please choose an option above or call the firm directly."
+        }
+      ]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function chooseMatter(matterType) {
@@ -242,15 +278,8 @@ export default function LegalConcierge({ embedded = false }) {
     });
   }
 
-  const showInputFooter = stage === "matter" || stage === "office" || stage === "slot";
   const inputPlaceholder =
-    stage === "matter"
-      ? "Select a matter type above..."
-      : stage === "office"
-        ? "Select an office above..."
-        : stage === "slot"
-          ? "Select an available slot above..."
-          : "Type your message...";
+    stage === "booked" ? "Ask a question or start a new request…" : "Type your message…";
 
   const panel = (
     <section className={`concierge-card ${embedded ? "concierge-card-embedded" : ""}`}>
@@ -400,14 +429,19 @@ export default function LegalConcierge({ embedded = false }) {
         </div>
       </div>
 
-      {showInputFooter && (
-        <div className="concierge-input-bar">
-          <input type="text" placeholder={inputPlaceholder} disabled readOnly />
-          <button type="button" disabled aria-label="Send">
-            <CornerDownLeft size={18} />
-          </button>
-        </div>
-      )}
+      <form className="concierge-input-bar" onSubmit={sendMessage}>
+        <input
+          type="text"
+          placeholder={inputPlaceholder}
+          value={userInput}
+          onChange={(event) => setUserInput(event.target.value)}
+          disabled={loading}
+          aria-label="Type a message to the concierge"
+        />
+        <button type="submit" disabled={loading || !userInput.trim()} aria-label="Send message">
+          {loading ? <Loader2 size={18} /> : <CornerDownLeft size={18} />}
+        </button>
+      </form>
     </section>
   );
 

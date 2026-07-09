@@ -90,8 +90,8 @@ export default function HomePage() {
                     proceedings and probate matters.
                   </p>
                   <p>
-                    The website experience is designed around the same promise: clear judgment, discreet intake and
-                    direct access to the right legal team.
+                    Every engagement is built on the same promise: clear judgment, discreet intake and direct access to
+                    the right legal team.
                   </p>
                 </div>
               </div>
@@ -228,9 +228,6 @@ export default function HomePage() {
                 <span>Contact</span>
                 <a href={`tel:${firm.primaryPhone.replace(/\s/g, "")}`}>{firm.primaryPhone}</a>
                 <a href={`mailto:${firm.klEmail}`}>{firm.klEmail}</a>
-                {firm.offices.map((office) => (
-                  <p key={office.id}>{office.label}</p>
-                ))}
               </div>
             </div>
 

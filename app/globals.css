@@ -1466,11 +1466,39 @@ p {
   gap: 10px;
 }
 
-.choice-grid,
 .partner-choice-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
+}
+
+/* Matter options as compact quick-reply chips — refined, still one tap,
+   and they no longer dominate the chat when you'd rather just type. */
+.choice-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.choice-grid .choice-button {
+  width: auto;
+  min-height: 0;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  gap: 0;
+}
+
+.choice-grid .choice-button::before {
+  display: none;
+}
+
+.choice-grid .choice-button svg {
+  display: none;
+}
+
+.choice-grid .choice-button:hover {
+  transform: translateY(-1px);
 }
 
 .slot-grid {
