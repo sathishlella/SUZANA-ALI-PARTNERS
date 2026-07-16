@@ -73,10 +73,14 @@ export default function Hero() {
           ))}
         </h1>
         <div ref={ctaRef} className="hero-actions">
-          <a href={`tel:${firm.primaryPhone.replace(/\s/g, "")}`} className="button button-primary">
+          <button
+            type="button"
+            className="button button-primary"
+            onClick={() => window.dispatchEvent(new CustomEvent("open-call-modal"))}
+          >
             <Phone size={18} />
             Call us
-          </a>
+          </button>
           <a href={firm.profileUrl} className="button button-light">
             Download Firm Profile
           </a>

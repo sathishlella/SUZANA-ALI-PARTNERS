@@ -23,6 +23,7 @@ import PartnerStack from "@/components/PartnerStack";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import Insights from "@/components/Insights";
 import LegalConcierge from "@/components/LegalConcierge";
+import CallModal from "@/components/CallModal";
 import CustomCursor from "@/components/CustomCursor";
 import PageTransition from "@/components/PageTransition";
 import { firm, panelPartners } from "@/lib/firm-data";
@@ -189,10 +190,14 @@ export default function HomePage() {
               ))}
             </div>
             <div className="final-cta">
-              <a href={`tel:${firm.primaryPhone.replace(/\s/g, "")}`} className="button button-primary">
+              <button
+                type="button"
+                className="button button-primary"
+                onClick={() => window.dispatchEvent(new CustomEvent("open-call-modal"))}
+              >
                 <Phone size={18} />
                 Call us
-              </a>
+              </button>
             </div>
           </div>
         </section>
@@ -251,6 +256,7 @@ export default function HomePage() {
         </footer>
 
         <LegalConcierge />
+        <CallModal />
       </main>
     </>
   );

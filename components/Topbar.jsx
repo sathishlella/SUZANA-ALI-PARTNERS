@@ -66,8 +66,6 @@ export default function Topbar() {
     };
   }, [menuOpen]);
 
-  const phoneHref = `tel:${firm.primaryPhone.replace(/\s/g, "")}`;
-
   return (
     <>
       <header
@@ -117,10 +115,17 @@ export default function Topbar() {
           ))}
         </nav>
         <div className="mobile-menu-footer">
-          <a href={phoneHref} className="button button-primary" onClick={() => setMenuOpen(false)}>
+          <button
+            type="button"
+            className="button button-primary"
+            onClick={() => {
+              setMenuOpen(false);
+              window.dispatchEvent(new CustomEvent("open-call-modal"));
+            }}
+          >
             <Phone size={17} />
             Call the firm
-          </a>
+          </button>
           <span className="mobile-menu-note">{firm.established}</span>
         </div>
       </div>
