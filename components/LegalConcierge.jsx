@@ -24,6 +24,7 @@ export default function LegalConcierge({ embedded = false }) {
   const [loading, setLoading] = useState(false);
   const scroller = useRef(null);
   const panelRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     scroller.current?.scrollTo({
@@ -102,6 +103,8 @@ export default function LegalConcierge({ embedded = false }) {
   function handleSubmit(event) {
     event.preventDefault();
     send(userInput);
+    // Keep the caret in the box so you can keep typing straight away.
+    inputRef.current?.focus();
   }
 
   // Starter questions only while nothing has been asked yet, so the chat stays clean.
@@ -171,11 +174,11 @@ export default function LegalConcierge({ embedded = false }) {
 
       <form className="concierge-input-bar" onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           type="text"
           placeholder="Type your message…"
           value={userInput}
           onChange={(event) => setUserInput(event.target.value)}
-          disabled={loading}
           aria-label="Type a message to the concierge"
         />
         <button type="submit" disabled={loading || !userInput.trim()} aria-label="Send message">
