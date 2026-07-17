@@ -1,11 +1,9 @@
 "use client";
 
-import { useRef, useLayoutEffect } from "react";
+import { useEffect, useRef, useLayoutEffect } from "react";
 import {
   ArrowRight,
-  CalendarCheck,
   Check,
-  Clock,
   Mail,
   MapPin,
   Phone,
@@ -63,6 +61,30 @@ export default function HomePage() {
   useReveal(panelRef);
   useReveal(contactRef);
 
+  // Scroll to in-page sections ourselves so the address bar stays clean
+  // (no "#firm" etc. appended) while links still work if JS is unavailable.
+  useEffect(() => {
+    const handleAnchorClick = (event) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const link = event.target.closest('a[href^="#"]');
+      if (!link) return;
+
+      const href = link.getAttribute("href");
+      if (!href || href === "#") return;
+
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+
+      event.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    document.addEventListener("click", handleAnchorClick);
+    return () => document.removeEventListener("click", handleAnchorClick);
+  }, []);
+
   return (
     <>
       <CustomCursor />
@@ -108,14 +130,14 @@ export default function HomePage() {
           <div className="container">
             <div className="consult-cta">
               <span className="eyebrow">Consultation</span>
-              <h2>Book a private consultation.</h2>
+              <h2>Speak with us directly.</h2>
               <p>
-                Choose the matter type, select your preferred office, pick an available slot and share a few details.
-                The concierge routes your request directly to the firm.
+                Choose the office nearest you and talk to our team about your matter. Every enquiry is handled
+                discreetly and taken by the lawyers who would act for you.
               </p>
               <div className="concierge-badges">
                 <span>
-                  <Clock size={14} /> 10-minute setup
+                  <MapPin size={14} /> Three offices
                 </span>
                 <span>
                   <Check size={14} /> Office-matched
@@ -127,10 +149,10 @@ export default function HomePage() {
               <button
                 type="button"
                 className="button button-primary consult-cta-button"
-                onClick={() => window.dispatchEvent(new CustomEvent("open-concierge"))}
+                onClick={() => window.dispatchEvent(new CustomEvent("open-call-modal"))}
               >
-                <CalendarCheck size={18} />
-                Book a consultation
+                <Phone size={18} />
+                Call us
               </button>
             </div>
           </div>
