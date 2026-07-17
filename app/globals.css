@@ -544,11 +544,11 @@ p {
   transform: scale(1.06);
 }
 
-/* On tall/narrow screens, bias the crop toward the three partners
-   (left-of-centre in the frame) so no one is cut off. */
+/* On tall/narrow screens the frame crops hard, so aim it at the branded wall
+   rather than the windows — the firm's identity still reads on mobile. */
 @media (max-width: 700px) {
   .hero-bg {
-    background-position: 31% center;
+    background-position: 78% center;
   }
 }
 

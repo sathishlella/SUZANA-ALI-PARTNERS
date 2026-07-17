@@ -205,7 +205,7 @@ export default function LegalConcierge({ embedded = false }) {
         aria-expanded={open}
       >
         {open ? <X size={22} /> : <MessageCircle size={22} />}
-        <span>{open ? "Close" : "Chatbot"}</span>
+        <span>{open ? "Close" : "Ask us"}</span>
       </button>
     </>
   );
